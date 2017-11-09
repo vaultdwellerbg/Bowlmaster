@@ -5,19 +5,25 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour {
 
-	public float launchSpeed = 200f;
-
 	private AudioSource audioSource;
+	private Rigidbody rigidBody;
 
 	void Start ()
 	{
-		audioSource = GetComponent<AudioSource>();
-		Throw();
+		InitMembers();
+		rigidBody.useGravity = false;
 	}
 
-	private void Throw()
+	private void InitMembers()
 	{
-		GetComponent<Rigidbody>().velocity = new Vector3(0, -10f, launchSpeed);
+		audioSource = GetComponent<AudioSource>();
+		rigidBody = GetComponent<Rigidbody>();
+	}
+
+	public void Launch(Vector3 velocity)
+	{
+		rigidBody.useGravity = true;
+		GetComponent<Rigidbody>().velocity = velocity;
 	}
 
 	private void OnCollisionEnter(Collision collision)
