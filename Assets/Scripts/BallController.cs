@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour {
 
+	public bool IsLaunched = false;
+
 	private AudioSource audioSource;
 	private Rigidbody rigidBody;
 
@@ -24,6 +26,7 @@ public class BallController : MonoBehaviour {
 	{
 		rigidBody.useGravity = true;
 		GetComponent<Rigidbody>().velocity = velocity;
+		IsLaunched = true;
 	}
 
 	private void OnCollisionEnter(Collision collision)

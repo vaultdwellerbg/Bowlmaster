@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof (BallController))]
 public class DragLaunch : MonoBehaviour {
 
 	private BallController ballController;
 	private float dragStartTime;
 	private Vector3 dragStartPos;
+	private float halfLaneWidth;
 
 	void Start ()
 	{
 		ballController = GetComponent<BallController>();
+		halfLaneWidth = GameObject.Find("Lane").GetComponent<Transform>().lossyScale.x / 2;
 	}
 
 	public void DragStart()
@@ -32,5 +35,15 @@ public class DragLaunch : MonoBehaviour {
 	{
 		float length = Mathf.Sqrt(Mathf.Pow(vector.x, 2) + Mathf.Pow(vector.y, 2));
 		return length / time;
+	}
+
+	public void MoveLaunchPoint(float value)
+	{
+		if (ballController.IsLaunched) return;
+
+		float newXPos = Mathf.Clamp(ballController.transform.position.x + value, -halfLaneWidth, halfLaneWidth);
+		Vector3 currentPos = ballController.transform.position;
+		Debug.Log(newXPos);
+		ballController.transform.position = new Vector3(newXPos, currentPos.y, currentPos.z);
 	}
 }
