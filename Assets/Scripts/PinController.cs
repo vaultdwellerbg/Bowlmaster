@@ -6,6 +6,11 @@ public class PinController : MonoBehaviour {
 
 	public float standingThreshold = 80f;
 
+	void Awake()
+	{
+		this.GetComponent<Rigidbody>().solverVelocityIterations = 10;
+	}
+
 	public bool IsStanding()
 	{
 		Vector3 eularAngles = transform.rotation.eulerAngles;
