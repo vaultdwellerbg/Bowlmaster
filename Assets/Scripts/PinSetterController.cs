@@ -46,12 +46,11 @@ public class PinSetterController : MonoBehaviour {
 
 	private void OnTriggerExit(Collider collider)
 	{
-		var gameObject = collider.gameObject;
-		var objectName = gameObject.name;
-		if (objectName == PIN_COLLIDER_NAME)
+		var exitedGameObject = collider.gameObject;
+		var pinController = exitedGameObject.GetComponent<PinController>();
+		if (pinController)
 		{
-			var pinMainObject = gameObject.transform.parent.gameObject;
-			Destroy(pinMainObject);
+			Destroy(exitedGameObject);
 		}
 	}
 }
