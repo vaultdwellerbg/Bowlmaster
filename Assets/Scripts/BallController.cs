@@ -9,11 +9,13 @@ public class BallController : MonoBehaviour {
 
 	private AudioSource audioSource;
 	private Rigidbody rigidBody;
+	private Vector3 startPosition;
 
 	void Start ()
 	{
 		InitMembers();
 		rigidBody.useGravity = false;
+		startPosition = transform.position;
 	}
 
 	private void InitMembers()
@@ -25,7 +27,7 @@ public class BallController : MonoBehaviour {
 	public void Launch(Vector3 velocity)
 	{
 		rigidBody.useGravity = true;
-		GetComponent<Rigidbody>().velocity = velocity;
+		rigidBody.velocity = velocity;
 		IsLaunched = true;
 	}
 
@@ -35,5 +37,14 @@ public class BallController : MonoBehaviour {
 		{
 			audioSource.Play();
 		}
+	}
+
+	public void Reset()
+	{
+		rigidBody.velocity = rigidBody.angularVelocity = Vector3.zero;
+		rigidBody.useGravity = false;
+		transform.position = startPosition;	
+		IsLaunched = false;
+		audioSource.Stop();
 	}
 }
