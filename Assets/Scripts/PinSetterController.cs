@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PinSetterController : MonoBehaviour {
 
+	public float distanceToRaise = 40f;
+
 	private Text standingPinsCount;
 	private bool ballEntered = false;
 	private int lastStandingCount = -1;
@@ -22,17 +24,21 @@ public class PinSetterController : MonoBehaviour {
 
 	public int CountStanding()
 	{
-		int standingCount = 0;
+		return GetStanding().Count;
+	}
+
+	private List<PinController> GetStanding()
+	{
+		List<PinController> standingPins = new List<PinController>();
 		PinController[] pins = GameObject.FindObjectsOfType<PinController>();
 		for (int i = 0; i < pins.Length; i++)
 		{
 			if (pins[i].IsStanding())
 			{
-				standingCount++;
+				standingPins.Add(pins[i]);
 			}
 		}
-
-		return standingCount;
+		return standingPins;
 	}
 
 	private void Update()
@@ -82,7 +88,6 @@ public class PinSetterController : MonoBehaviour {
 		ballEntered = false;
 		lastStandingCount = -1;
 		ballController.Reset();
-
 	}
 
 	private void OnTriggerEnter(Collider collider)
@@ -103,5 +108,30 @@ public class PinSetterController : MonoBehaviour {
 		{
 			Destroy(exitedGameObject);
 		}
+	}
+
+	public void RaisePins()
+	{
+		List<PinController> standingPins = GetStanding();
+		foreach (var pin in standingPins)
+		{
+			var pinGameObject = pin.gameObject;
+			pinGameObject.GetComponent<Rigidbody>().useGravity = false;
+			pinGameObject.transform.Translate(0, 0, distanceToRaise);
+		}
+	}
+
+	public void LowerPins()
+	{
+		PinController[] pins = GameObject.FindObjectsOfType<PinController>();
+		for (int i = 0; i < pins.Length; i++)
+		{
+			pins[i].gameObject.GetComponent<Rigidbody>().useGravity = true;
+		}
+	}
+
+	public void RenewPins()
+	{
+		Debug.Log("RenewPins");
 	}
 }
