@@ -117,7 +117,7 @@ public class PinSetterController : MonoBehaviour {
 		{
 			var pinGameObject = pin.gameObject;
 			pinGameObject.GetComponent<Rigidbody>().useGravity = false;
-			pinGameObject.transform.Translate(0, 0, distanceToRaise);
+			pinGameObject.transform.Translate(new Vector3(0, distanceToRaise, 0), Space.World);
 		}
 	}
 
