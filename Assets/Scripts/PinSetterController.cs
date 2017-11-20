@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class PinSetterController : MonoBehaviour {
 
-	public float distanceToRaise = 40f;
-
 	private Text standingPinsCount;
 	private bool ballEntered = false;
 	private int lastStandingCount = -1;
@@ -115,9 +113,7 @@ public class PinSetterController : MonoBehaviour {
 		List<PinController> standingPins = GetStanding();
 		foreach (var pin in standingPins)
 		{
-			var pinGameObject = pin.gameObject;
-			pinGameObject.GetComponent<Rigidbody>().useGravity = false;
-			pinGameObject.transform.Translate(new Vector3(0, distanceToRaise, 0), Space.World);
+			pin.Raise();
 		}
 	}
 
@@ -126,7 +122,7 @@ public class PinSetterController : MonoBehaviour {
 		PinController[] pins = GameObject.FindObjectsOfType<PinController>();
 		for (int i = 0; i < pins.Length; i++)
 		{
-			pins[i].gameObject.GetComponent<Rigidbody>().useGravity = true;
+			pins[i].Lower();
 		}
 	}
 

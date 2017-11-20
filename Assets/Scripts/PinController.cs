@@ -5,12 +5,15 @@ using UnityEngine;
 public class PinController : MonoBehaviour {
 
 	public float standingThreshold = 80f;
+	public float distanceToRaise = 40f;
 
 	private const float PIN_MESH_ROTATION_OFFSET = 270f;
+	private Rigidbody rigidBody;
 
 	void Awake()
 	{
-		this.GetComponent<Rigidbody>().solverVelocityIterations = 10;
+		rigidBody = GetComponent<Rigidbody>();
+		rigidBody.solverVelocityIterations = 10;
 	}
 
 	public bool IsStanding()
@@ -20,5 +23,16 @@ public class PinController : MonoBehaviour {
 		float zRotation = Mathf.Abs(eularAngles.z);
 
 		return xRotation < standingThreshold && zRotation < standingThreshold;
+	}
+
+	public void Raise()
+	{
+		rigidBody.useGravity = false;
+		transform.Translate(new Vector3(0, distanceToRaise, 0), Space.World);
+	}
+
+	public void Lower()
+	{
+		rigidBody.useGravity = true;
 	}
 }
