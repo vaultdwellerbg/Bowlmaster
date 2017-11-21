@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PinSetterController : MonoBehaviour {
 
+	public GameObject pinLayoutPrefab;
+
 	private Text standingPinsCount;
 	private bool ballEntered = false;
 	private int lastStandingCount = -1;
@@ -13,6 +15,8 @@ public class PinSetterController : MonoBehaviour {
 
 	private const string PIN_COLLIDER_NAME = "Pin_Collider";
 	private const float SECONDS_TO_SETTLE = 3f;
+	private const float RESET_HEIGHT = 40f;
+	private const float PINS_OFFSET = 1829f;
 
 	private void Start()
 	{
@@ -128,6 +132,8 @@ public class PinSetterController : MonoBehaviour {
 
 	public void RenewPins()
 	{
-		Debug.Log("RenewPins");
+		GameObject oldPinsLayout = GameObject.Find("PinLayout");
+		Destroy(oldPinsLayout);
+		Instantiate(pinLayoutPrefab, new Vector3(0, RESET_HEIGHT, PINS_OFFSET), Quaternion.identity);
 	}
 }
