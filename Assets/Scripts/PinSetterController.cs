@@ -7,60 +7,31 @@ public class PinSetterController : MonoBehaviour {
 
 	public GameObject pinLayoutPrefab;
 
-	private Text standingPinsCount;
 	private bool ballEntered = false;
-	private int lastStandingCount = -1;
-	private float lastChangeTime;
 	private BallController ballController;
+	private PinCounter pinCounter;
 
-	private const string PIN_COLLIDER_NAME = "Pin_Collider";
 	private const float SECONDS_TO_SETTLE = 3f;
 	private const float RESET_HEIGHT = 40f;
 	private const float PINS_OFFSET = 1829f;
 
 	private void Start()
 	{
-		standingPinsCount = GameObject.Find("StandingPinsCount").GetComponent<Text>();
+		pinCounter = GetComponent<PinCounter>();
 		ballController = GameObject.FindObjectOfType<BallController>();
 	}
 
 	private void Update()
 	{
-		standingPinsCount.text = CountStanding().ToString();
-
 		if (ballEntered)
 		{
 			HandleThrow();
 		}
 	}
 
-	public int CountStanding()
-	{
-		return GetStanding().Count;
-	}
-
-	private List<PinController> GetStanding()
-	{
-		List<PinController> standingPins = new List<PinController>();
-		PinController[] pins = GameObject.FindObjectsOfType<PinController>();
-		for (int i = 0; i < pins.Length; i++)
-		{
-			if (pins[i].IsStanding())
-			{
-				standingPins.Add(pins[i]);
-			}
-		}
-		return standingPins;
-	}
-
 	private void HandleThrow()
 	{
-		int currentStandingCount = CountStanding();
-		if (currentStandingCount != lastStandingCount)
-		{
-			UpdateLastStandingData(currentStandingCount);
-			return;
-		}
+		pinCounter.UpdateCountIfChanged();
 
 		if (PinsAreSettled())
 		{
@@ -68,27 +39,21 @@ public class PinSetterController : MonoBehaviour {
 		}
 	}
 
-	private void UpdateLastStandingData(int currentStandingCount)
-	{
-		lastChangeTime = Time.time;
-		lastStandingCount = currentStandingCount;
-	}
-
 	private bool PinsAreSettled()
 	{
-		return Time.time - lastChangeTime > SECONDS_TO_SETTLE;
+		return Time.time - pinCounter.lastCountChangeTime > SECONDS_TO_SETTLE;
 	}
 
 	private void FinishThrow()
 	{
-		standingPinsCount.color = Color.green;
+		pinCounter.DisplayFinalScore();
 		ResetGameState();
 	}
 
 	private void ResetGameState()
 	{
 		ballEntered = false;
-		lastStandingCount = -1;
+		pinCounter.ResetCount();
 		ballController.Reset();
 	}
 
@@ -97,14 +62,14 @@ public class PinSetterController : MonoBehaviour {
 		var ball = collider.gameObject.GetComponent<BallController>();
 		if (ball)
 		{
-			standingPinsCount.color = Color.red;
+			pinCounter.DisplayCountChanging();
 			ballEntered = true;
 		}
 	}
 
 	public void RaisePins()
 	{
-		List<PinController> standingPins = GetStanding();
+		List<PinController> standingPins = pinCounter.GetStanding();
 		foreach (var pin in standingPins)
 		{
 			pin.Raise();
