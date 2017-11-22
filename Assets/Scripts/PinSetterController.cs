@@ -24,6 +24,16 @@ public class PinSetterController : MonoBehaviour {
 		ballController = GameObject.FindObjectOfType<BallController>();
 	}
 
+	private void Update()
+	{
+		standingPinsCount.text = CountStanding().ToString();
+
+		if (ballEntered)
+		{
+			HandleThrow();
+		}
+	}
+
 	public int CountStanding()
 	{
 		return GetStanding().Count;
@@ -43,17 +53,7 @@ public class PinSetterController : MonoBehaviour {
 		return standingPins;
 	}
 
-	private void Update()
-	{
-		standingPinsCount.text = CountStanding().ToString();
-
-		if (ballEntered)
-		{
-			CheckStanding();
-		}
-	}
-
-	private void CheckStanding()
+	private void HandleThrow()
 	{
 		int currentStandingCount = CountStanding();
 		if (currentStandingCount != lastStandingCount)
@@ -64,7 +64,7 @@ public class PinSetterController : MonoBehaviour {
 
 		if (PinsAreSettled())
 		{
-			PinsHaveSettled();
+			FinishThrow();
 		}
 	}
 
@@ -79,7 +79,7 @@ public class PinSetterController : MonoBehaviour {
 		return Time.time - lastChangeTime > SECONDS_TO_SETTLE;
 	}
 
-	private void PinsHaveSettled()
+	private void FinishThrow()
 	{
 		standingPinsCount.color = Color.green;
 		ResetGameState();
@@ -99,16 +99,6 @@ public class PinSetterController : MonoBehaviour {
 		{
 			standingPinsCount.color = Color.red;
 			ballEntered = true;
-		}
-	}
-
-	private void OnTriggerExit(Collider collider)
-	{
-		var exitedGameObject = collider.gameObject;
-		var pinController = exitedGameObject.GetComponent<PinController>();
-		if (pinController)
-		{
-			Destroy(exitedGameObject);
 		}
 	}
 

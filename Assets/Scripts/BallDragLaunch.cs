@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof (BallController))]
-public class DragLaunch : MonoBehaviour {
+public class BallDragLaunch : MonoBehaviour {
 
 	private BallController ballController;
 	private float dragStartTime;
