@@ -6,6 +6,9 @@ public class ScoreManager : MonoBehaviour {
 
 	public enum Action { Tidy, Reset, EndTurn, EndGame }
 
+	private int[] throws = new int[21];
+	private int currentThrow = 1;
+
 	public Action Throw(int pins)
 	{
 		if (pins < 0 || pins > 10)
@@ -13,11 +16,38 @@ public class ScoreManager : MonoBehaviour {
 			throw new UnityException("Invalid pin count for throw.");
 		}
 
-		Action action = Action.Tidy;
-		if (pins == 10)
+		throws[currentThrow - 1] = pins;
+		return GetAction();
+
+		throw new UnityException("No specified action");
+	}
+
+	private Action GetAction()
+	{
+		if (IsStrike())
 		{
-			action = Action.EndTurn;
+			currentThrow += 2;
+			return Action.EndTurn;
 		}
-		return action;
+		else if (IsFirstBall())
+		{
+			currentThrow += 1;
+			return Action.Tidy;
+		}
+		else
+		{
+			currentThrow += 1;
+			return Action.EndTurn;
+		}
+	}
+
+	private bool IsStrike()
+	{
+		return throws[currentThrow - 1] == 10;
+	}
+
+	private bool IsFirstBall()
+	{
+		return currentThrow % 2 != 0;
 	}
 }
