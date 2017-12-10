@@ -17,64 +17,30 @@ public class ScoreManager {
 		}
 
 		throws[currentThrow - 1] = pins;
-		return GetAction();
+		Action returnAction = GetAction();
+		IncrementCurrentThrow();
+		return returnAction;
 
 		throw new UnityException("No specified action");
 	}
 
 	private Action GetAction()
 	{
-		if (IsStrike())
+		if (IsLastFrame() && (IsStrike() || IsSpare()))
 		{
-			if (IsLastFrame())
-			{
-				currentThrow += 2;
-				return Action.Reset;
-			}
-			else if (IsExtraThrow() && IsPrevThrowStrike())
-			{
-				currentThrow += 1;
-				return Action.Tidy;
-			}
-			else if (IsExtraThrow())
-			{
-				return Action.EndGame;
-			}
-			else
-			{
-				currentThrow += 2;
-				return Action.EndTurn;
-			}
-		}
-		else if (IsFirstBall())
-		{
-			if (IsExtraThrow() && IsPrevThrowSpare())
-			{
-				return Action.EndGame;
-			}
-			else
-			{
-				currentThrow += 1;
-				return Action.Tidy;
-			}
-		}
-		else if (IsLastFrame() && !IsSpare())
-		{
-			return Action.EndGame;
-		}
-		else if (IsLastFrame() && IsSpare())
-		{
-			currentThrow += 1;
 			return Action.Reset;
 		}
-		else if (IsExtraThrow())
+		else if ((IsStrike() || currentThrow % 2 == 0) && currentThrow <= 18)
 		{
-			return Action.EndGame;
+			return Action.EndTurn;
+		}
+		else if ((!IsStrike() && currentThrow % 2 != 0 && currentThrow <= 20) || (currentThrow == 21 && IsPrevThrowStrike()))
+		{
+			return Action.Tidy;
 		}
 		else
 		{
-			currentThrow += 1;
-			return Action.EndTurn;
+			return Action.EndGame;
 		}
 	}
 
@@ -83,24 +49,9 @@ public class ScoreManager {
 		return throws[currentThrow - 1] == 10;
 	}
 
-	private bool IsFirstBall()
-	{
-		return currentThrow % 2 != 0;
-	}
-
-	private bool IsPrevThrowSpare()
-	{
-		return throws[currentThrow - 2] + throws[currentThrow - 3] == 10 && throws[currentThrow - 2] != 0;
-	}
-
-	private bool IsExtraThrow()
-	{
-		return currentThrow > 20;
-	}
-
 	private bool IsLastFrame()
 	{
-		return currentThrow > 18 && !IsExtraThrow();
+		return currentThrow > 18 && currentThrow <= 20;
 	}
 
 	private bool IsSpare()
@@ -111,6 +62,18 @@ public class ScoreManager {
 	private bool IsPrevThrowStrike()
 	{
 		return throws[currentThrow - 2] + throws[currentThrow - 3] == 10 && throws[currentThrow - 2] == 0;
+	}
+
+	private void IncrementCurrentThrow()
+	{
+		if (IsStrike() && currentThrow < 20)
+		{
+			currentThrow += 2;
+		}
+		else
+		{
+			currentThrow += 1;
+		}
 	}
 
 }
