@@ -26,15 +26,15 @@ public class ScoreManager {
 
 	private Action GetAction()
 	{
-		if (IsLastFrame() && (IsStrike() || IsSpare()))
+		if (ShouldReset())
 		{
 			return Action.Reset;
 		}
-		else if ((IsStrike() || currentThrow % 2 == 0) && currentThrow <= 18)
+		else if (ShouldEndTurn())
 		{
 			return Action.EndTurn;
 		}
-		else if ((!IsStrike() && currentThrow % 2 != 0 && currentThrow <= 20) || (currentThrow == 21 && IsPrevThrowStrike()))
+		else if (ShouldTidy())
 		{
 			return Action.Tidy;
 		}
@@ -44,9 +44,9 @@ public class ScoreManager {
 		}
 	}
 
-	private bool IsStrike()
+	private bool ShouldReset()
 	{
-		return throws[currentThrow - 1] == 10;
+		return IsLastFrame() && (IsStrike() || IsSpare());
 	}
 
 	private bool IsLastFrame()
@@ -54,26 +54,48 @@ public class ScoreManager {
 		return currentThrow > 18 && currentThrow <= 20;
 	}
 
+	private bool IsStrike()
+	{
+		return throws[currentThrow - 1] == 10;
+	}
+
 	private bool IsSpare()
 	{
 		return throws[currentThrow - 1] + throws[currentThrow - 2] == 10;
 	}
 
-	private bool IsPrevThrowStrike()
+	private bool ShouldEndTurn()
+	{
+		bool isLastFrameThrow = currentThrow > 18;
+		return (IsStrike() || !IsFirstBall()) && !isLastFrameThrow;
+	}
+
+	private bool IsFirstBall()
+	{
+		return currentThrow % 2 != 0;
+	}
+
+	private bool ShouldTidy()
+	{
+		bool isBonusThrow = currentThrow > 20;
+		bool isFirstBonusThrow = currentThrow == 21;
+		return (!IsStrike() && IsFirstBall() && !isBonusThrow) || (isFirstBonusThrow && IsPrevFrameStrike());
+	}
+
+	private bool IsPrevFrameStrike()
 	{
 		return throws[currentThrow - 2] + throws[currentThrow - 3] == 10 && throws[currentThrow - 2] == 0;
 	}
 
 	private void IncrementCurrentThrow()
 	{
-		if (IsStrike() && currentThrow < 20)
-		{
-			currentThrow += 2;
-		}
-		else
-		{
-			currentThrow += 1;
-		}
+		int increment = IsStrikeBeforeBonusThrows() ? 2 : 1;
+		currentThrow += increment;
+	}
+
+	private bool IsStrikeBeforeBonusThrows()
+	{
+		return IsStrike() && currentThrow < 20;
 	}
 
 }
