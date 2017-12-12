@@ -7,7 +7,7 @@ public class ScoreManager {
 	public enum Action { Tidy, Reset, EndTurn, EndGame }
 
 	private int[] throws = new int[21];
-	private int currentThrow = 1;
+	private int currentThrowNumber = 1;
 
 	public Action Throw(int pins)
 	{
@@ -16,7 +16,7 @@ public class ScoreManager {
 			throw new UnityException("Invalid pin count for throw.");
 		}
 
-		throws[currentThrow - 1] = pins;
+		throws[currentThrowNumber - 1] = pins;
 		Action returnAction = GetAction();
 		IncrementCurrentThrow();
 		return returnAction;
@@ -51,45 +51,56 @@ public class ScoreManager {
 
 	private bool IsLastFrame()
 	{
-		return currentThrow > 18 && currentThrow <= 20;
+		return currentThrowNumber > 18 && currentThrowNumber <= 20;
 	}
 
 	private bool IsStrike()
 	{
-		return throws[currentThrow - 1] == 10;
+		return throws[currentThrowNumber - 1] == 10;
 	}
 
 	private bool IsSpare()
 	{
-		return throws[currentThrow - 1] + throws[currentThrow - 2] == 10;
+		return throws[currentThrowNumber - 1] + throws[currentThrowNumber - 2] == 10
+			&& throws[currentThrowNumber - 1] != 0;
 	}
 
 	private bool ShouldEndTurn()
 	{
-		bool isLastFrameThrow = currentThrow > 18;
+		bool isLastFrameThrow = currentThrowNumber > 18;
 		return (IsStrike() || !IsFirstBall()) && !isLastFrameThrow;
 	}
 
 	private bool IsFirstBall()
 	{
-		return currentThrow % 2 != 0;
+		return currentThrowNumber % 2 != 0;
 	}
 
 	private bool ShouldTidy()
 	{
-		bool isBonusThrow = currentThrow > 20;
-		return !IsStrike() && IsFirstBall() && !isBonusThrow;
+		bool isBonusThrow = currentThrowNumber > 20;
+		return (!IsStrike() && IsFirstBall() && !isBonusThrow) || IsFirstBallAfterLastFrameStrike();
+	}
+
+	private bool IsFirstBallAfterLastFrameStrike()
+	{
+		return IsPrevThrowSpare() && !IsFirstBall();
+	}
+
+	private bool IsPrevThrowSpare()
+	{
+		return throws[currentThrowNumber - 2] == 10;
 	}
 
 	private void IncrementCurrentThrow()
 	{
 		int increment = IsStrikeBeforeLastFrame() ? 2 : 1;
-		currentThrow += increment;
+		currentThrowNumber += increment;
 	}
 
 	private bool IsStrikeBeforeLastFrame()
 	{
-		return IsStrike() && currentThrow < 18;
+		return IsStrike() && currentThrowNumber < 18;
 	}
 
 }

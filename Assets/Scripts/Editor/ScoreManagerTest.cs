@@ -113,4 +113,22 @@ public class ScoreManagerTest {
 		Assert.AreEqual(endGame, scoreManager.Throw(10));
 	}
 
+	[Test]
+	public void T11_FirstBallAfterLastFrameStrikeShouldReturnTidy()
+	{
+		PlayNineFrames();
+		scoreManager.Throw(10);
+
+		Assert.AreEqual(tidy, scoreManager.Throw(4));
+	}
+
+	[Test]
+	public void T12_GutterBallAfterLastFrameStrikeShouldReturnTidy()
+	{
+		PlayNineFrames();
+		scoreManager.Throw(10);
+
+		Assert.AreEqual(tidy, scoreManager.Throw(0));
+	}
+
 }
