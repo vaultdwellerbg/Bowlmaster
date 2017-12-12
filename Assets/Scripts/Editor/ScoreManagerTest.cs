@@ -49,28 +49,11 @@ public class ScoreManagerTest {
 
 	private void PlayNineFrames()
 	{
-		scoreManager.Throw(10);
-
-		scoreManager.Throw(9);
-		scoreManager.Throw(1);
-
-		scoreManager.Throw(5);
-		scoreManager.Throw(5);
-
-		scoreManager.Throw(7);
-		scoreManager.Throw(2);
-
-		scoreManager.Throw(10);
-
-		scoreManager.Throw(10);
-
-		scoreManager.Throw(10);
-
-		scoreManager.Throw(9);
-		scoreManager.Throw(0);
-
-		scoreManager.Throw(8);
-		scoreManager.Throw(2);
+		int[] rolls = { 10,  9, 1,  5, 5,  7, 2,  10,  10,  10,  9, 0,  8, 2};
+		foreach (int roll in rolls)
+		{
+			scoreManager.Throw(roll);
+		}
 	}
 
 	[Test]
