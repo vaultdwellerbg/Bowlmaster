@@ -6,7 +6,7 @@ public class ScoreManager {
 
 	public enum Action { Tidy, Reset, EndTurn, EndGame }
 
-	private int[] throws = new int[22];
+	private int[] throws = new int[21];
 	private int currentThrow = 1;
 
 	public Action Throw(int pins)
@@ -78,24 +78,18 @@ public class ScoreManager {
 	private bool ShouldTidy()
 	{
 		bool isBonusThrow = currentThrow > 20;
-		bool isFirstBonusThrow = currentThrow == 21;
-		return (!IsStrike() && IsFirstBall() && !isBonusThrow) || (isFirstBonusThrow && IsPrevFrameStrike());
-	}
-
-	private bool IsPrevFrameStrike()
-	{
-		return throws[currentThrow - 2] + throws[currentThrow - 3] == 10 && throws[currentThrow - 2] == 0;
+		return !IsStrike() && IsFirstBall() && !isBonusThrow;
 	}
 
 	private void IncrementCurrentThrow()
 	{
-		int increment = IsStrikeBeforeBonusThrows() ? 2 : 1;
+		int increment = IsStrikeBeforeLastFrame() ? 2 : 1;
 		currentThrow += increment;
 	}
 
-	private bool IsStrikeBeforeBonusThrows()
+	private bool IsStrikeBeforeLastFrame()
 	{
-		return IsStrike() && currentThrow < 20;
+		return IsStrike() && currentThrow < 18;
 	}
 
 }
