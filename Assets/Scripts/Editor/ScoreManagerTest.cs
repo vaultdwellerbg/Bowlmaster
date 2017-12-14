@@ -107,9 +107,9 @@ public class ScoreManagerTest {
 	public void T10_ThrowingTwoStrikesAfterLastFrameStrikeEndsGame()
 	{
 		PlayNineFrames();
-		scoreManager.Throw(10);
 
-		scoreManager.Throw(10);
+		Assert.AreEqual(reset, scoreManager.Throw(10));
+		Assert.AreEqual(reset, scoreManager.Throw(10));
 		Assert.AreEqual(endGame, scoreManager.Throw(10));
 	}
 
@@ -129,6 +129,15 @@ public class ScoreManagerTest {
 		scoreManager.Throw(10);
 
 		Assert.AreEqual(tidy, scoreManager.Throw(0));
+	}
+
+	[Test]
+	public void T13_ThrowingGutterBallThenSpareReturnsEndTurnAndIncrementsThrowOnce()
+	{
+		scoreManager.Throw(0);
+
+		Assert.AreEqual(endTurn, scoreManager.Throw(10));
+		Assert.AreEqual(3, scoreManager.GetCurrentThrowNumber());
 	}
 
 }

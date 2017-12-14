@@ -9,6 +9,11 @@ public class ScoreManager {
 	private int[] throws = new int[21];
 	private int currentThrowNumber = 1;
 
+	public int GetCurrentThrowNumber()
+	{
+		return currentThrowNumber;
+	}
+
 	public Action Throw(int pins)
 	{
 		if (pins < 0 || pins > 10)
@@ -46,7 +51,7 @@ public class ScoreManager {
 
 	private bool ShouldReset()
 	{
-		return IsLastFrame() && (IsStrike() || IsSpare());
+		return IsLastFrame() && (IsStrike() || IsDoubleStrike() || IsSpare());
 	}
 
 	private bool IsLastFrame()
@@ -56,7 +61,12 @@ public class ScoreManager {
 
 	private bool IsStrike()
 	{
-		return throws[currentThrowNumber - 1] == 10;
+		return throws[currentThrowNumber - 1] == 10 && IsFirstBall();
+	}
+
+	private bool IsDoubleStrike()
+	{
+		return throws[currentThrowNumber - 1] == 10 && !IsFirstBall();
 	}
 
 	private bool IsSpare()
