@@ -7,6 +7,7 @@ public class PinCounter : MonoBehaviour {
 
 	private Text standingPinsCount;
 	private int lastStandingCount = -1;
+
 	public float lastCountChangeTime;
 
 	void Start ()
@@ -38,7 +39,7 @@ public class PinCounter : MonoBehaviour {
 		return standingPins;
 	}
 
-	public void UpdateCountIfChanged()
+	public void UpdateStandingCountIfChanged()
 	{
 		int currentStandingCount = CountStanding();
 		if (currentStandingCount != lastStandingCount)
@@ -56,7 +57,6 @@ public class PinCounter : MonoBehaviour {
 	public void ResetCount()
 	{
 		lastStandingCount = -1;
-		standingPinsCount.color = Color.white;
 	}
 
 	public void DisplayCountChanging()

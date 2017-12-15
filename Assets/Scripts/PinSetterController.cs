@@ -8,10 +8,14 @@ public class PinSetterController : MonoBehaviour {
 	public GameObject pinLayoutPrefab;
 
 	private bool ballEntered = false;
+	private bool initialPinCountStored = false;
 	private BallController ballController;
 	private PinCounter pinCounter;
+	private ScoreManager scoreManager;
+	private int initialPinCount;
+	private Animator animator;
 
-	private const float SECONDS_TO_SETTLE = 3f;
+	private const float SECONDS_TO_SETTLE = 5f;
 	private const float RESET_HEIGHT = 40f;
 	private const float PINS_OFFSET = 1829f;
 
@@ -19,19 +23,30 @@ public class PinSetterController : MonoBehaviour {
 	{
 		pinCounter = GetComponent<PinCounter>();
 		ballController = GameObject.FindObjectOfType<BallController>();
+		scoreManager = new ScoreManager();
+		animator = GetComponent<Animator>();
 	}
 
 	private void Update()
 	{
 		if (ballEntered)
 		{
+			StoreInitialPinCount();
 			HandleThrow();
 		}
 	}
 
+	private void StoreInitialPinCount()
+	{
+		if (initialPinCountStored) return;
+
+		initialPinCount = pinCounter.CountStanding();
+		initialPinCountStored = true;
+	}
+
 	private void HandleThrow()
 	{
-		pinCounter.UpdateCountIfChanged();
+		pinCounter.UpdateStandingCountIfChanged();
 
 		if (PinsAreSettled())
 		{
@@ -46,13 +61,35 @@ public class PinSetterController : MonoBehaviour {
 
 	private void FinishThrow()
 	{
+		ScoreManager.Action action = AddThrowToScoreAndGetAction();
+		PerformAction(action);
 		pinCounter.DisplayFinalScore();
 		ResetGameState();
+	}
+
+	private ScoreManager.Action AddThrowToScoreAndGetAction()
+	{
+		int currentPinCount = pinCounter.CountStanding();
+		int throwScore = initialPinCount - currentPinCount;
+		return scoreManager.Throw(throwScore);
+	}
+
+	private void PerformAction(ScoreManager.Action action)
+	{
+		if (action == ScoreManager.Action.Tidy)
+		{
+			animator.SetTrigger("tidyTrigger");
+		}
+		else
+		{
+			animator.SetTrigger("resetTrigger");
+		}
 	}
 
 	private void ResetGameState()
 	{
 		ballEntered = false;
+		initialPinCountStored = false;
 		pinCounter.ResetCount();
 		ballController.Reset();
 	}

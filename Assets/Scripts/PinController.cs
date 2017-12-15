@@ -21,7 +21,6 @@ public class PinController : MonoBehaviour {
 		Vector3 eularAngles = transform.rotation.eulerAngles;
 		float xRotation = Mathf.Abs(eularAngles.x - PIN_MESH_ROTATION_OFFSET);
 		float zRotation = Mathf.Abs(eularAngles.z);
-
 		return xRotation < standingThreshold && zRotation < standingThreshold;
 	}
 
