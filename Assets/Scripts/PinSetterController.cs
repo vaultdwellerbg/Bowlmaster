@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class PinSetterController : MonoBehaviour {
 
 	public GameObject pinLayoutPrefab;
+	public bool ballLeftSpaceBeforePins = false;
 
-	private bool ballEntered = false;
 	private bool initialPinCountStored = false;
 	private BallController ballController;
 	private PinCounter pinCounter;
@@ -29,7 +29,7 @@ public class PinSetterController : MonoBehaviour {
 
 	private void Update()
 	{
-		if (ballEntered)
+		if (ballLeftSpaceBeforePins)
 		{
 			StoreInitialPinCount();
 			HandleThrow();
@@ -88,20 +88,10 @@ public class PinSetterController : MonoBehaviour {
 
 	private void ResetGameState()
 	{
-		ballEntered = false;
+		ballLeftSpaceBeforePins = false;
 		initialPinCountStored = false;
 		pinCounter.ResetCount();
 		ballController.Reset();
-	}
-
-	private void OnTriggerEnter(Collider collider)
-	{
-		var ball = collider.gameObject.GetComponent<BallController>();
-		if (ball)
-		{
-			pinCounter.DisplayCountChanging();
-			ballEntered = true;
-		}
 	}
 
 	public void RaisePins()
