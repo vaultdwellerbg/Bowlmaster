@@ -16,7 +16,7 @@ public class PinSetterController : MonoBehaviour {
 	private Animator animator;
 
 	private const float SECONDS_TO_SETTLE = 5f;
-	private const float RESET_HEIGHT = 40f;
+	private const float RESET_HEIGHT = 0f;
 	private const float PINS_OFFSET = 1829f;
 
 	private void Start()
