@@ -11,7 +11,7 @@ public class PinSetterController : MonoBehaviour {
 	private bool initialPinCountStored = false;
 	private BallController ballController;
 	private PinCounter pinCounter;
-	private ScoreManager scoreManager;
+	private ActionManager scoreManager;
 	private int initialPinCount;
 	private Animator animator;
 
@@ -23,7 +23,7 @@ public class PinSetterController : MonoBehaviour {
 	{
 		pinCounter = GetComponent<PinCounter>();
 		ballController = GameObject.FindObjectOfType<BallController>();
-		scoreManager = new ScoreManager();
+		scoreManager = new ActionManager();
 		animator = GetComponent<Animator>();
 	}
 
@@ -61,22 +61,22 @@ public class PinSetterController : MonoBehaviour {
 
 	private void FinishThrow()
 	{
-		ScoreManager.Action action = AddThrowToScoreAndGetAction();
+		ActionManager.Action action = AddThrowToScoreAndGetAction();
 		PerformAction(action);
 		pinCounter.DisplayFinalScore();
 		ResetGameState();
 	}
 
-	private ScoreManager.Action AddThrowToScoreAndGetAction()
+	private ActionManager.Action AddThrowToScoreAndGetAction()
 	{
 		int currentPinCount = pinCounter.CountStanding();
 		int throwScore = initialPinCount - currentPinCount;
 		return scoreManager.Throw(throwScore);
 	}
 
-	private void PerformAction(ScoreManager.Action action)
+	private void PerformAction(ActionManager.Action action)
 	{
-		if (action == ScoreManager.Action.Tidy)
+		if (action == ActionManager.Action.Tidy)
 		{
 			animator.SetTrigger("tidyTrigger");
 		}

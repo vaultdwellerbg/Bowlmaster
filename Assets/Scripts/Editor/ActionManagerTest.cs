@@ -4,19 +4,19 @@ using UnityEngine.TestTools;
 using NUnit.Framework;
 using System.Collections;
 
-public class ScoreManagerTest {
+public class ActionManagerTest {
 
-	private ScoreManager scoreManager;
-	private ScoreManager.Action endTurn, tidy, reset, endGame;
+	private ActionManager scoreManager;
+	private ActionManager.Action endTurn, tidy, reset, endGame;
 
 	[SetUp]
 	public void Setup()
 	{
-		scoreManager = new ScoreManager();
-		endTurn = ScoreManager.Action.EndTurn;
-		tidy = ScoreManager.Action.Tidy;
-		reset = ScoreManager.Action.Reset;
-		endGame = ScoreManager.Action.EndGame;
+		scoreManager = new ActionManager();
+		endTurn = ActionManager.Action.EndTurn;
+		tidy = ActionManager.Action.Tidy;
+		reset = ActionManager.Action.Reset;
+		endGame = ActionManager.Action.EndGame;
 	}
 
 	[Test]
