@@ -18,12 +18,16 @@ public class BallDragLaunch : MonoBehaviour {
 
 	public void DragStart()
 	{
+		if (ballController.IsLaunched) return;
+
 		dragStartTime = Time.time;
 		dragStartPos = Input.mousePosition;
 	}
 
 	public void DragEnd()
 	{
+		if (ballController.IsLaunched) return;
+
 		Vector3 dragVector = Input.mousePosition - dragStartPos;
 		float dragTime = Time.time - dragStartTime;
 		float launchSpeed = GetLaunchSpeed(dragVector, dragTime);
