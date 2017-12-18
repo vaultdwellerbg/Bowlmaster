@@ -13,7 +13,7 @@ public class BallDragLaunch : MonoBehaviour {
 	void Start ()
 	{
 		ballController = GetComponent<BallController>();
-		halfLaneWidth = GameObject.Find("Lane").GetComponent<Transform>().lossyScale.x / 2;
+		halfLaneWidth = GameObject.Find("Floor").GetComponent<Transform>().lossyScale.x / 2;
 	}
 
 	public void DragStart()
@@ -47,7 +47,6 @@ public class BallDragLaunch : MonoBehaviour {
 
 		float newXPos = Mathf.Clamp(ballController.transform.position.x + value, -halfLaneWidth, halfLaneWidth);
 		Vector3 currentPos = ballController.transform.position;
-		Debug.Log(newXPos);
 		ballController.transform.position = new Vector3(newXPos, currentPos.y, currentPos.z);
 	}
 }
