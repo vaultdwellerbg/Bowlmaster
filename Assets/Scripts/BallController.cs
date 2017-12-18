@@ -46,5 +46,6 @@ public class BallController : MonoBehaviour {
 		transform.position = startPosition;	
 		IsLaunched = false;
 		audioSource.Stop();
+		transform.rotation = Quaternion.identity;
 	}
 }

@@ -34,4 +34,10 @@ public class PinController : MonoBehaviour {
 	{
 		rigidBody.useGravity = true;
 	}
+
+	public void Straighten()
+	{
+		transform.rotation = Quaternion.Euler(270, 0, 0);
+	}
+
 }
