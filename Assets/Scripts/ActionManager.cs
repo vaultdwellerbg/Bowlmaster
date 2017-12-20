@@ -14,6 +14,17 @@ public class ActionManager {
 		return currentThrowNumber;
 	}
 
+	public static Action GetNextAction(List<int> pinHits)
+	{
+		var actionManager = new ActionManager();
+		Action latestAction = Action.Tidy;
+		foreach (int pinHit in pinHits)
+		{
+			latestAction = actionManager.Throw(pinHit);
+		}
+		return latestAction;
+	}
+
 	public Action Throw(int pins)
 	{
 		if (pins < 0 || pins > 10)
