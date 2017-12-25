@@ -6,16 +6,12 @@ using UnityEngine.UI;
 public class PinSetterController : MonoBehaviour {
 
 	public GameObject pinLayoutPrefab;
-	public bool ballLeftSpaceBeforePins = false;
 
-	private bool initialPinCountStored = false;
 	private BallController ballController;
 	private PinCounter pinCounter;
 	private ActionManager scoreManager;
-	private int initialPinCount;
 	private Animator animator;
 
-	private const float SECONDS_TO_SETTLE = 5f;
 	private const float RESET_HEIGHT = 0f;
 	private const float PINS_OFFSET = 1829f;
 
@@ -27,55 +23,15 @@ public class PinSetterController : MonoBehaviour {
 		animator = GetComponent<Animator>();
 	}
 
-	private void Update()
+	public void FinishThrow()
 	{
-		if (ballLeftSpaceBeforePins)
-		{
-			StoreInitialPinCount();
-			HandleThrow();
-		}
-	}
-
-	private void StoreInitialPinCount()
-	{
-		if (initialPinCountStored) return;
-
-		initialPinCount = pinCounter.CountStanding();
-		initialPinCountStored = true;
-	}
-
-	private void HandleThrow()
-	{
-		pinCounter.UpdateStandingCountIfChanged();
-
-		if (PinsAreSettled())
-		{
-			FinishThrow();
-		}
-	}
-
-	private bool PinsAreSettled()
-	{
-		return Time.time - pinCounter.lastCountChangeTime > SECONDS_TO_SETTLE;
-	}
-
-	private void FinishThrow()
-	{
-		ActionManager.Action action = AddThrowToScoreAndGetAction();
-		PerformAction(action);
-		pinCounter.DisplayFinalScore();
+		PerformAction();
 		ResetGameState();
 	}
 
-	private ActionManager.Action AddThrowToScoreAndGetAction()
+	private void PerformAction()
 	{
-		int currentPinCount = pinCounter.CountStanding();
-		int throwScore = initialPinCount - currentPinCount;
-		return scoreManager.Throw(throwScore);
-	}
-
-	private void PerformAction(ActionManager.Action action)
-	{
+		ActionManager.Action action = ActionManager.GetNextAction(new List<int>() { 1 });
 		if (action == ActionManager.Action.Tidy)
 		{
 			animator.SetTrigger("tidyTrigger");
@@ -88,9 +44,7 @@ public class PinSetterController : MonoBehaviour {
 
 	private void ResetGameState()
 	{
-		ballLeftSpaceBeforePins = false;
-		initialPinCountStored = false;
-		pinCounter.ResetCount();
+		pinCounter.ResetCounter();
 		ballController.Reset();
 	}
 

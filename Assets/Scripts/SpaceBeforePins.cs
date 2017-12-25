@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class SpaceBeforePins : MonoBehaviour {
 
-	private PinSetterController pinSetterController;
 	private PinCounter pinCounter;
 
 	private void Start()
 	{
-		pinSetterController = GameObject.FindObjectOfType<PinSetterController>();
 		pinCounter = GameObject.FindObjectOfType<PinCounter>();
 	}
 
@@ -19,7 +17,7 @@ public class SpaceBeforePins : MonoBehaviour {
 		if (ball)
 		{
 			pinCounter.DisplayCountChanging();
-			pinSetterController.ballLeftSpaceBeforePins = true;
+			pinCounter.ballLeftSpaceBeforePins = true;
 		}
 	}
 }

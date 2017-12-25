@@ -5,20 +5,79 @@ using UnityEngine.UI;
 
 public class PinCounter : MonoBehaviour {
 
+	public bool ballLeftSpaceBeforePins = false;
+	public float lastCountChangeTime;
+
 	private Text standingPinsCount;
 	private int lastStandingCount = -1;
+	private bool initialPinCountStored = false;
+	private int initialPinCount;
+	private PinSetterController pinSetterController;
 
-	public float lastCountChangeTime;
+	private const float SECONDS_TO_SETTLE = 5f;
 
 	void Start ()
 	{
 		standingPinsCount = GameObject.Find("StandingPinsCount").GetComponent<Text>();
+		pinSetterController = GameObject.FindObjectOfType<PinSetterController>();
 	}
 	
 	void Update ()
 	{
 		standingPinsCount.text = CountStanding().ToString();
+
+		if (ballLeftSpaceBeforePins)
+		{
+			StoreInitialPinCount();
+			HandleThrow();
+		}
 	}
+
+
+	private void StoreInitialPinCount()
+	{
+		if (initialPinCountStored) return;
+
+		initialPinCount = CountStanding();
+		initialPinCountStored = true;
+	}
+
+	private void HandleThrow()
+	{
+		UpdateStandingCountIfChanged();
+
+		if (PinsAreSettled())
+		{
+			DisplayFinalScore();
+			pinSetterController.FinishThrow();
+		}
+	}
+
+	public void UpdateStandingCountIfChanged()
+	{
+		int currentStandingCount = CountStanding();
+		if (currentStandingCount != lastStandingCount)
+		{
+			UpdateLastStandingData(currentStandingCount);
+		}
+	}
+
+	private void UpdateLastStandingData(int currentStandingCount)
+	{
+		lastCountChangeTime = Time.time;
+		lastStandingCount = currentStandingCount;
+	}
+
+	private bool PinsAreSettled()
+	{
+		return Time.time - lastCountChangeTime > SECONDS_TO_SETTLE;
+	}
+
+	//private void AddThrowToScore()
+	//{
+	//	int currentPinCount = CountStanding();
+	//	int throwScore = initialPinCount - currentPinCount;
+	//}
 
 	public int CountStanding()
 	{
@@ -39,23 +98,10 @@ public class PinCounter : MonoBehaviour {
 		return standingPins;
 	}
 
-	public void UpdateStandingCountIfChanged()
+	public void ResetCounter()
 	{
-		int currentStandingCount = CountStanding();
-		if (currentStandingCount != lastStandingCount)
-		{
-			UpdateLastStandingData(currentStandingCount);
-		}
-	}
-
-	private void UpdateLastStandingData(int currentStandingCount)
-	{
-		lastCountChangeTime = Time.time;
-		lastStandingCount = currentStandingCount;
-	}
-
-	public void ResetCount()
-	{
+		ballLeftSpaceBeforePins = false;
+		initialPinCountStored = false;
 		lastStandingCount = -1;
 	}
 
