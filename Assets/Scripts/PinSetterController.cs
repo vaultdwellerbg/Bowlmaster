@@ -100,7 +100,6 @@ public class PinSetterController : MonoBehaviour {
 		foreach (var pin in standingPins)
 		{
 			pin.Raise();
-			pin.Straighten();
 		}
 	}
 

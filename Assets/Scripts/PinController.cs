@@ -28,16 +28,11 @@ public class PinController : MonoBehaviour {
 	{
 		rigidBody.useGravity = false;
 		transform.Translate(new Vector3(0, distanceToRaise, 0), Space.World);
+		transform.rotation = Quaternion.Euler(270, 0, 0);
 	}
 
 	public void Lower()
 	{
 		rigidBody.useGravity = true;
 	}
-
-	public void Straighten()
-	{
-		transform.rotation = Quaternion.Euler(270, 0, 0);
-	}
-
 }
