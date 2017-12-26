@@ -17,7 +17,7 @@ public class PinSetterController : MonoBehaviour {
 
 	private void Start()
 	{
-		pinCounter = GetComponent<PinCounter>();
+		pinCounter = GameObject.FindObjectOfType<PinCounter>();
 		ballController = GameObject.FindObjectOfType<BallController>();
 		scoreManager = new ActionManager();
 		animator = GetComponent<Animator>();
@@ -44,7 +44,7 @@ public class PinSetterController : MonoBehaviour {
 
 	private void ResetGameState()
 	{
-		pinCounter.ResetCounter();
+		pinCounter.Reset();
 		ballController.Reset();
 	}
 

@@ -21,10 +21,25 @@ public class PinCounter : MonoBehaviour {
 		standingPinsCount = GameObject.Find("StandingPinsCount").GetComponent<Text>();
 		pinSetterController = GameObject.FindObjectOfType<PinSetterController>();
 	}
-	
-	void Update ()
+
+	private void OnTriggerExit(Collider collider)
 	{
-		standingPinsCount.text = CountStanding().ToString();
+		var ball = collider.gameObject.GetComponent<BallController>();
+		if (ball)
+		{
+			ShowStandingCountIsChanging();
+			ballLeftSpaceBeforePins = true;
+		}
+	}
+
+	public void ShowStandingCountIsChanging()
+	{
+		standingPinsCount.color = Color.red;
+	}
+
+	void Update()
+	{
+		UpdateStandingPinsDisplay();
 
 		if (ballLeftSpaceBeforePins)
 		{
@@ -33,6 +48,29 @@ public class PinCounter : MonoBehaviour {
 		}
 	}
 
+	private void UpdateStandingPinsDisplay()
+	{
+		standingPinsCount.text = CountStanding().ToString();
+	}
+
+	public int CountStanding()
+	{
+		return GetStanding().Count;
+	}
+
+	public List<PinController> GetStanding()
+	{
+		List<PinController> standingPins = new List<PinController>();
+		PinController[] pins = GameObject.FindObjectsOfType<PinController>();
+		for (int i = 0; i < pins.Length; i++)
+		{
+			if (pins[i].IsStanding())
+			{
+				standingPins.Add(pins[i]);
+			}
+		}
+		return standingPins;
+	}
 
 	private void StoreInitialPinCount()
 	{
@@ -48,7 +86,7 @@ public class PinCounter : MonoBehaviour {
 
 		if (PinsAreSettled())
 		{
-			DisplayFinalScore();
+			ShowStandingCountIsSet();
 			pinSetterController.FinishThrow();
 		}
 	}
@@ -73,45 +111,21 @@ public class PinCounter : MonoBehaviour {
 		return Time.time - lastCountChangeTime > SECONDS_TO_SETTLE;
 	}
 
+	public void ShowStandingCountIsSet()
+	{
+		standingPinsCount.color = Color.green;
+	}
+
 	//private void AddThrowToScore()
 	//{
 	//	int currentPinCount = CountStanding();
 	//	int throwScore = initialPinCount - currentPinCount;
 	//}
 
-	public int CountStanding()
-	{
-		return GetStanding().Count;
-	}
-
-	public List<PinController> GetStanding()
-	{
-		List<PinController> standingPins = new List<PinController>();
-		PinController[] pins = GameObject.FindObjectsOfType<PinController>();
-		for (int i = 0; i < pins.Length; i++)
-		{
-			if (pins[i].IsStanding())
-			{
-				standingPins.Add(pins[i]);
-			}
-		}
-		return standingPins;
-	}
-
-	public void ResetCounter()
+	public void Reset()
 	{
 		ballLeftSpaceBeforePins = false;
 		initialPinCountStored = false;
 		lastStandingCount = -1;
-	}
-
-	public void DisplayCountChanging()
-	{
-		standingPinsCount.color = Color.red;
-	}
-
-	public void DisplayFinalScore()
-	{
-		standingPinsCount.color = Color.green;
 	}
 }
