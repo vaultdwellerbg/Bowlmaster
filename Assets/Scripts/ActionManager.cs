@@ -25,7 +25,7 @@ public class ActionManager {
 		return latestAction;
 	}
 
-	public Action Throw(int pins)
+	private Action Throw(int pins)
 	{
 		if (pins < 0 || pins > 10)
 		{

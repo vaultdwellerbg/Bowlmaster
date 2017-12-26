@@ -7,9 +7,7 @@ public class PinSetterController : MonoBehaviour {
 
 	public GameObject pinLayoutPrefab;
 
-	private BallController ballController;
 	private PinCounter pinCounter;
-	private ActionManager scoreManager;
 	private Animator animator;
 
 	private const float RESET_HEIGHT = 0f;
@@ -18,20 +16,11 @@ public class PinSetterController : MonoBehaviour {
 	private void Start()
 	{
 		pinCounter = GameObject.FindObjectOfType<PinCounter>();
-		ballController = GameObject.FindObjectOfType<BallController>();
-		scoreManager = new ActionManager();
 		animator = GetComponent<Animator>();
 	}
 
-	public void FinishThrow()
+	public void Perform(ActionManager.Action action)
 	{
-		PerformAction();
-		ResetGameState();
-	}
-
-	private void PerformAction()
-	{
-		ActionManager.Action action = ActionManager.GetNextAction(new List<int>() { 1 });
 		if (action == ActionManager.Action.Tidy)
 		{
 			animator.SetTrigger("tidyTrigger");
@@ -40,12 +29,6 @@ public class PinSetterController : MonoBehaviour {
 		{
 			animator.SetTrigger("resetTrigger");
 		}
-	}
-
-	private void ResetGameState()
-	{
-		pinCounter.Reset();
-		ballController.Reset();
 	}
 
 	public void RaisePins()

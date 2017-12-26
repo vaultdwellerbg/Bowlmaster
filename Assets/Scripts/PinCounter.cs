@@ -13,6 +13,7 @@ public class PinCounter : MonoBehaviour {
 	private bool initialPinCountStored = false;
 	private int initialPinCount;
 	private PinSetterController pinSetterController;
+	private GameManager gameManager;
 
 	private const float SECONDS_TO_SETTLE = 5f;
 
@@ -20,6 +21,7 @@ public class PinCounter : MonoBehaviour {
 	{
 		standingPinsCount = GameObject.Find("StandingPinsCount").GetComponent<Text>();
 		pinSetterController = GameObject.FindObjectOfType<PinSetterController>();
+		gameManager = GameObject.FindObjectOfType<GameManager>();
 	}
 
 	private void OnTriggerExit(Collider collider)
@@ -87,7 +89,7 @@ public class PinCounter : MonoBehaviour {
 		if (PinsAreSettled())
 		{
 			ShowStandingCountIsSet();
-			pinSetterController.FinishThrow();
+			gameManager.Throw(GetPinHitCount());
 		}
 	}
 
@@ -116,11 +118,11 @@ public class PinCounter : MonoBehaviour {
 		standingPinsCount.color = Color.green;
 	}
 
-	//private void AddThrowToScore()
-	//{
-	//	int currentPinCount = CountStanding();
-	//	int throwScore = initialPinCount - currentPinCount;
-	//}
+	private int GetPinHitCount()
+	{
+		int currentPinCount = CountStanding();
+		return initialPinCount - currentPinCount;
+	}
 
 	public void Reset()
 	{
