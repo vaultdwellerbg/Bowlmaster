@@ -8,9 +8,50 @@ using System.Linq;
 public class ScoreManagerTest
 {
 	[Test]
-	public void T00PassingTest()
+	public void T01_Hit_2_3()
 	{
-		Assert.AreEqual(1, 1);
+		int[] rolls = { 2, 3 };
+		int[] frames = { 5 };
+		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
 	}
 
+	[Test]
+	public void T02_Hit_2_3_4()
+	{
+		int[] rolls = { 2, 3,  4 };
+		int[] frames = { 5 };
+		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
+	}
+
+	[Test]
+	public void T03_Hit_2_3_4_5()
+	{
+		int[] rolls = { 2, 3,  4, 5 };
+		int[] frames = { 5, 9 };
+		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
+	}
+
+	[Test]
+	public void T04_Hit_2_3_4_5_6()
+	{
+		int[] rolls = { 2, 3,  4, 5,  6 };
+		int[] frames = { 5, 9 };
+		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
+	}
+
+	[Test]
+	public void T05_Hit_2_3_4_5_6_1()
+	{
+		int[] rolls = { 2, 3,  4, 5,  6, 1 };
+		int[] frames = { 5, 9, 7 };
+		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
+	}
+
+	[Test]
+	public void T06_Hit_2_3_4_5_6_1_2()
+	{
+		int[] rolls = { 2, 3,  4, 5,  6, 1,  2 };
+		int[] frames = { 5, 9, 7 };
+		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
+	}
 }
