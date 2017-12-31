@@ -54,4 +54,12 @@ public class ScoreManagerTest
 		int[] frames = { 5, 9, 7 };
 		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
 	}
+
+	[Test]
+	public void T07_HitStrikeAnd1()
+	{
+		int[] rolls = { 10, 1 };
+		int[] frames = { };
+		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
+	}
 }

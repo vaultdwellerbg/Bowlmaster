@@ -19,22 +19,34 @@ public class ScoreManager {
 	public static List<int> ScoreFrames(List<int> rolls)
 	{
 		var frameList = new List<int>();
-		int prevRoll = 0;
+		int frameScore = 0;
+		int ballsToHitForScore = 2;
 		foreach (int roll in rolls)
 		{
-			if (prevRoll == 0)
+			if (IsStrike(roll))
 			{
-				prevRoll = roll;
+				ballsToHitForScore = 3;
 			}
-			else
+			frameScore += roll;
+			ballsToHitForScore--;
+			if (IsEndOfFrameScore(ballsToHitForScore))
 			{
-				int frameScore = roll + prevRoll;
 				frameList.Add(frameScore);
-				prevRoll = 0;
+				frameScore = 0;
+				ballsToHitForScore = 2;
 			}
 		}
 
 		return frameList;
 	}
 
+	private static bool IsStrike(int roll)
+	{
+		return roll == 10;
+	}
+
+	private static bool IsEndOfFrameScore(int ballsToHitForScore)
+	{
+		return ballsToHitForScore == 0;
+	}
 }
