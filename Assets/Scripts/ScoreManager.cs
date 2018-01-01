@@ -19,45 +19,39 @@ public class ScoreManager {
 	public static List<int> ScoreFrames(List<int> rolls)
 	{
 		var frameList = new List<int>();
-		int frameScore = 0;
-		int ballsToHitForScore = 2;
-		int prevRoll = 0;
-		foreach (int roll in rolls)
+		int[] rollsArray = rolls.ToArray();
+		int rollsCount = rollsArray.Length;
+		int increment;
+		for (int i = 0; i < rollsArray.Length; i += increment)
 		{
-			if (IsStrike(roll))
+			if (!HasSecondRoll(rollsCount, i)) break;
+
+			var currentRoll = rollsArray[i];
+			int secondRoll = rollsArray[i + 1];
+			int frameScore = 0;
+			if (currentRoll == 10 || currentRoll + secondRoll == 10)
 			{
-				ballsToHitForScore = 3;
+				if (HasThirdRoll(rollsCount, i)) break;
+				frameScore = currentRoll + secondRoll + rollsArray[i + 2];
 			}
-			else if (IsSpare(roll, prevRoll))
+			else
 			{
-				ballsToHitForScore = 2;
+				frameScore = currentRoll + secondRoll;
 			}
-			frameScore += roll;
-			prevRoll = roll;
-			ballsToHitForScore--;
-			if (IsEndOfFrameScore(ballsToHitForScore))
-			{
-				frameList.Add(frameScore);
-				frameScore = 0;
-				ballsToHitForScore = 2;
-			}
+			frameList.Add(frameScore);
+			increment = currentRoll == 10 ? 1 : 2;
 		}
 
 		return frameList;
 	}
 
-	private static bool IsStrike(int roll)
+	private static bool HasSecondRoll(int rollsCount, int i)
 	{
-		return roll == 10;
+		return i + 1 < rollsCount;
 	}
 
-	private static bool IsSpare(int roll, int prevRoll)
+	private static bool HasThirdRoll(int rollsCount, int i)
 	{
-		return roll + prevRoll == 10;
-	}
-
-	private static bool IsEndOfFrameScore(int ballsToHitForScore)
-	{
-		return ballsToHitForScore == 0;
+		return i + 2 >= rollsCount;
 	}
 }
