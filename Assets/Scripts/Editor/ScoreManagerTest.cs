@@ -174,4 +174,14 @@ public class ScoreManagerTest
 		int[] totalS = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 33 };
 		Assert.AreEqual(totalS.ToList(), ScoreManager.ScoreCumulative(rolls.ToList()));
 	}
+
+	// http://slocums.homestead.com/gamescore.html
+	[Test]
+	[Category("Verification")]
+	public void TG02GoldenCopyA()
+	{
+		int[] rolls = { 10,  7, 3,  9, 0,  10,  0, 8,  8, 2,  0, 6,  10,  10,  10,  8, 1 };
+		int[] totalS = { 20, 39, 48, 66, 74, 84, 90, 120, 148, 167 };
+		Assert.AreEqual(totalS.ToList(), ScoreManager.ScoreCumulative(rolls.ToList()));
+	}
 }
