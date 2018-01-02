@@ -111,4 +111,59 @@ public class ScoreManagerTest
 		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
 	}
 
+	[Test]
+	public void T14_MultiStrikes()
+	{
+		int[] rolls = { 10,  10,  2, 3 };
+		int[] frames = { 22, 15, 5 };
+		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
+	}
+
+	[Test]
+	public void T15_MultiStrikes2()
+	{
+		int[] rolls = { 10,  10,  2, 3,  10,  5, 3 };
+		int[] frames = { 22, 15, 5, 18, 8 };
+		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
+	}
+
+	[Test]
+	public void T16_TestGutterGame()
+	{
+		int[] rolls = { 0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0,  0, 0 };
+		int[] totalS = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		Assert.AreEqual(totalS.ToList(), ScoreManager.ScoreCumulative(rolls.ToList()));
+	}
+
+	[Test]
+	public void T17_TestAllOnes()
+	{
+		int[] rolls = { 1, 1,  1, 1,  1, 1,  1, 1,  1, 1,  1, 1,  1, 1,  1, 1,  1, 1,  1, 1 };
+		int[] totalS = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 };
+		Assert.AreEqual(totalS.ToList(), ScoreManager.ScoreCumulative(rolls.ToList()));
+	}
+
+	[Test]
+	public void T18_TestAllStrikes()
+	{
+		int[] rolls = { 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10 };
+		int[] totalS = { 30, 60, 90, 120, 150, 180, 210, 240, 270, 300 };
+		Assert.AreEqual(totalS.ToList(), ScoreManager.ScoreCumulative(rolls.ToList()));
+	}
+
+	[Test]
+	public void T19_TestImmediateStrikeBonus()
+	{
+		int[] rolls = { 5, 5,  3 };
+		int[] frames = { 13 };
+		Assert.AreEqual(frames.ToList(), ScoreManager.ScoreFrames(rolls.ToList()));
+	}
+
+	[Test]
+	public void T20_SpareInLastFrame()
+	{
+		int[] rolls = { 1, 1,  1, 1,  1, 1,  1, 1,  1, 1,  1, 1,  1, 1,  1, 1,  1, 1,  1, 9,  7 };
+		int[] totalS = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 35 };
+		Assert.AreEqual(totalS.ToList(), ScoreManager.ScoreCumulative(rolls.ToList()));
+	}
 }
