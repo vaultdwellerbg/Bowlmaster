@@ -24,34 +24,47 @@ public class ScoreManager {
 		int increment;
 		for (int i = 0; frameList.Count < 10; i += increment)
 		{
-			if (!HasSecondRoll(rollsCount, i)) break;
-
-			var currentRoll = rollsArray[i];
-			int secondRoll = rollsArray[i + 1];
-			int frameScore = 0;
-			if (currentRoll == 10 || currentRoll + secondRoll == 10)
-			{
-				if (HasThirdRoll(rollsCount, i)) break;
-				frameScore = currentRoll + secondRoll + rollsArray[i + 2];
-			}
-			else
-			{
-				frameScore = currentRoll + secondRoll;
-			}
-			frameList.Add(frameScore);
-			increment = currentRoll == 10 ? 1 : 2;
+			int? frameScore = GetFrameScore(rollsArray, i);
+			if (frameScore == null) break;
+			frameList.Add(frameScore.Value);
+			increment = rollsArray[i] == 10 ? 1 : 2;
 		}
 
 		return frameList;
 	}
 
-	private static bool HasSecondRoll(int rollsCount, int i)
+	private static int? GetFrameScore(int[] rollsArray, int index)
+	{
+		int rollsCount = rollsArray.Length;
+		if (!HasNextRoll(rollsCount, index)) return null;
+
+		var currentRoll = rollsArray[index];
+		int nextRoll = rollsArray[index + 1];
+
+		if (IsStrikeOrSpare(currentRoll, nextRoll))
+		{
+			if (!HasSubsequentRoll(rollsCount, index)) return null;
+			int subsquentRoll = rollsArray[index + 2];
+			return currentRoll + nextRoll + subsquentRoll;
+		}
+		else
+		{
+			return currentRoll + nextRoll;
+		}
+	}
+
+	private static bool HasNextRoll(int rollsCount, int i)
 	{
 		return i + 1 < rollsCount;
 	}
 
-	private static bool HasThirdRoll(int rollsCount, int i)
+	private static bool IsStrikeOrSpare(int currentRoll, int secondRoll)
 	{
-		return i + 2 >= rollsCount;
+		return currentRoll == 10 || currentRoll + secondRoll == 10;
+	}
+
+	private static bool HasSubsequentRoll(int rollsCount, int i)
+	{
+		return i + 2 < rollsCount;
 	}
 }
