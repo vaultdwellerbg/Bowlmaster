@@ -22,7 +22,7 @@ public class ScoreManager {
 		int[] rollsArray = rolls.ToArray();
 		int rollsCount = rollsArray.Length;
 		int increment;
-		for (int i = 0; i < rollsArray.Length; i += increment)
+		for (int i = 0; i < 19; i += increment)
 		{
 			if (!HasSecondRoll(rollsCount, i)) break;
 
