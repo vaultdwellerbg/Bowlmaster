@@ -19,4 +19,9 @@ public class ScoreDisplay : MonoBehaviour {
 			frameTexts[i].text = (i*2).ToString();
 		}
 	}
+
+	public void FillRollCard(List<int> rolls)
+	{
+
+	}
 }

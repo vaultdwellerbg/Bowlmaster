@@ -8,20 +8,28 @@ public class GameManager : MonoBehaviour {
 	private PinSetterController pinSetterController;
 	private BallController ballController;
 	private PinCounter pinCounter;
+	private ScoreDisplay scoreDisplay;
 
 	void Start ()
 	{
 		pinSetterController = GameObject.FindObjectOfType<PinSetterController>();
 		ballController = GameObject.FindObjectOfType<BallController>();
 		pinCounter = GameObject.FindObjectOfType<PinCounter>();
+		scoreDisplay = GameObject.FindObjectOfType<ScoreDisplay>();
 	}
 
 	public void Throw(int pinsHit)
 	{
-		pinHits.Add(pinsHit);
-		Debug.Log(pinHits);
-		ActionManager.Action action = ActionManager.GetNextAction(pinHits);
-		pinSetterController.Perform(action);
+		try
+		{
+			pinHits.Add(pinsHit);
+			pinSetterController.Perform(ActionManager.GetNextAction(pinHits));
+			scoreDisplay.FillRollCard(pinHits);
+		}
+		catch (System.Exception)
+		{
+			Debug.LogWarning("Error with registering pins hit");
+		}
 		ResetGameState();
 	}
 

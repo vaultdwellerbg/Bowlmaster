@@ -31,7 +31,6 @@ public class ActionManager {
 		{
 			throw new UnityException("Invalid pin count for throw.");
 		}
-		Debug.Log(pins);
 		throws[currentThrowNumber - 1] = pins;
 		Action returnAction = GetAction();
 		IncrementCurrentThrow();
