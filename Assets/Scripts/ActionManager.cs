@@ -12,13 +12,13 @@ public static class ActionManager {
 
 		for (int i = 0; i < rolls.Count; i++)
 		{
-
+			int currentRoll = rolls[i];
 			if (i == 20)
 			{
 				nextAction = Action.EndGame;
 			}
-			else if (i >= 18 && rolls[i] == 10)
-			{ // Handle last-frame special cases
+			else if (StrikeInLastFrame(i, currentRoll))
+			{
 				nextAction = Action.Reset;
 			}
 			else if (i == 19)
@@ -31,8 +31,8 @@ public static class ActionManager {
 				{
 					nextAction = Action.Reset;
 				}
-				else if (rolls[18] + rolls[19] >= 10)
-				{  // Roll 21 awarded
+				else if (ShouldThrow21thBall(rolls[18], rolls[19]))
+				{
 					nextAction = Action.Tidy;
 				}
 				else
@@ -40,11 +40,11 @@ public static class ActionManager {
 					nextAction = Action.EndGame;
 				}
 			}
-			else if (i % 2 == 0)
-			{ // First bowl of frame
-				if (rolls[i] == 10)
+			else if (IsFirstBallOfFrame(i))
+			{
+				if (currentRoll == 10)
 				{
-					rolls.Insert(i, 0); // Insert virtual 0 after strike
+					rolls.Insert(i, 0);
 					nextAction = Action.EndTurn;
 				}
 				else
@@ -53,11 +53,26 @@ public static class ActionManager {
 				}
 			}
 			else
-			{ // Second bowl of frame
+			{
 				nextAction = Action.EndTurn;
 			}
 		}
 
 		return nextAction;
+	}
+
+	private static bool StrikeInLastFrame(int i, int currentRoll)
+	{
+		return i >= 18 && currentRoll == 10;
+	}
+
+	private static bool ShouldThrow21thBall(int firstRoll, int secondRoll)
+	{
+		return firstRoll + secondRoll >= 10;
+	}
+
+	private static bool IsFirstBallOfFrame(int i)
+	{
+		return i % 2 == 0;
 	}
 }
