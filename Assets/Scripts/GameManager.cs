@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-	private List<int> pinHits = new List<int>();
+	private List<int> rolls = new List<int>();
 	private PinSetterController pinSetterController;
 	private BallController ballController;
 	private PinCounter pinCounter;
@@ -22,15 +22,21 @@ public class GameManager : MonoBehaviour {
 	{
 		try
 		{
-			pinHits.Add(pinsHit);
-			pinSetterController.Perform(ActionManager.GetNextAction(pinHits));
-			scoreDisplay.FillRollCard(pinHits);
+			rolls.Add(pinsHit);
+			pinSetterController.Perform(ActionManager.GetNextAction(rolls));
+			FillScoreCard();
 		}
 		catch (System.Exception)
 		{
 			Debug.LogWarning("Error with registering pins hit");
 		}
 		ResetGameState();
+	}
+
+	private void FillScoreCard()
+	{
+		scoreDisplay.FillRolls(rolls);
+		scoreDisplay.FillFrames(ScoreManager.ScoreCumulative(rolls));
 	}
 
 	private void ResetGameState()
