@@ -15,7 +15,6 @@ public class OptionsController : MonoBehaviour {
 		persistentMusic = GameObject.FindObjectOfType<PersistentMusic>();
 
 		volumeSlider.value = PlayerPrefsManager.GetMasterVolume();
-		difficultySlider.value = PlayerPrefsManager.GetDifficulty();
 	}
 	
 	void Update () 
@@ -29,7 +28,6 @@ public class OptionsController : MonoBehaviour {
 	public void SaveAndExit()
 	{
 		PlayerPrefsManager.SetMasterVolume(volumeSlider.value);
-		PlayerPrefsManager.SetDifficulty((int)difficultySlider.value);
 		levelManager.LoadLevel("Start");
 	}
 	
