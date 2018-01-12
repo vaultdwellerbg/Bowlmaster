@@ -6,8 +6,17 @@ using UnityEngine.UI;
 public class BallModelChooser : MonoBehaviour {
 
 	public Texture[] modelSprites;
+	public int selectedModelIndex = 0;
 
-	private int selectedModelIndex = 0;
+	private void Start()
+	{
+		SetSelectedModel();
+	}
+
+	private void SetSelectedModel()
+	{
+		GetComponent<RawImage>().texture = modelSprites[selectedModelIndex];
+	}
 
 	public void ChangeSelectedModel()
 	{
@@ -16,6 +25,6 @@ public class BallModelChooser : MonoBehaviour {
 		{
 			selectedModelIndex = 0;
 		}
-		GetComponent<RawImage>().texture = modelSprites[selectedModelIndex];
+		SetSelectedModel();
 	}
 }

@@ -6,6 +6,7 @@ using UnityEngine;
 public class BallController : MonoBehaviour {
 
 	public bool IsLaunched = false;
+	public Material[] modelMaterials;
 
 	private AudioSource audioSource;
 	private Rigidbody rigidBody;
@@ -14,6 +15,7 @@ public class BallController : MonoBehaviour {
 	void Start ()
 	{
 		InitMembers();
+		ConfigureMaterial();
 		rigidBody.useGravity = false;
 		startPosition = transform.position;
 	}
@@ -22,6 +24,15 @@ public class BallController : MonoBehaviour {
 	{
 		audioSource = GetComponent<AudioSource>();
 		rigidBody = GetComponent<Rigidbody>();
+	}
+
+	private void ConfigureMaterial()
+	{
+		int index = PlayerPrefsManager.GetBallModelIndex();
+		if (index < modelMaterials.Length)
+		{
+			GetComponent<MeshRenderer>().material = modelMaterials[index];
+		}
 	}
 
 	public void Launch(Vector3 velocity)

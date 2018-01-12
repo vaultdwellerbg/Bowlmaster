@@ -9,12 +9,14 @@ public class OptionsController : MonoBehaviour {
 	public Slider difficultySlider;
 	
 	private PersistentMusic persistentMusic;
+	private BallModelChooser ballModelChooser;
 
 	void Start () 
 	{
 		persistentMusic = GameObject.FindObjectOfType<PersistentMusic>();
-
+		ballModelChooser = GameObject.FindObjectOfType<BallModelChooser>();
 		volumeSlider.value = PlayerPrefsManager.GetMasterVolume();
+		ballModelChooser.selectedModelIndex = PlayerPrefsManager.GetBallModelIndex();
 	}
 	
 	void Update () 
@@ -28,6 +30,7 @@ public class OptionsController : MonoBehaviour {
 	public void SaveAndExit()
 	{
 		PlayerPrefsManager.SetMasterVolume(volumeSlider.value);
+		PlayerPrefsManager.SetBallModelIndex(ballModelChooser.selectedModelIndex);
 		levelManager.LoadLevel("Start");
 	}
 	

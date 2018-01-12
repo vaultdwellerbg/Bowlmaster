@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerPrefsManager : MonoBehaviour {
 
 	const string MASTER_VOLUME_KEY = "master_volume";
+	const string BALL_MODEL_KEY = "ball_model";
 
 	#region master volume
 
@@ -24,6 +25,20 @@ public class PlayerPrefsManager : MonoBehaviour {
 		float volume = PlayerPrefs.GetFloat(MASTER_VOLUME_KEY);
 		return (volume == 0f) ? 1f : volume;
 	}
-	
+
+	#endregion
+
+	#region ball model
+
+	public static void SetBallModelIndex(int index)
+	{
+		PlayerPrefs.SetInt(BALL_MODEL_KEY, index);
+	}
+
+	public static int GetBallModelIndex()
+	{
+		return PlayerPrefs.GetInt(BALL_MODEL_KEY);
+	}
+
 	#endregion
 }
