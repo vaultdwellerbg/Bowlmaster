@@ -44,7 +44,7 @@ public static class ActionManager {
 			{
 				if (currentRoll == 10)
 				{
-					rolls.Insert(i, 0);
+					AddEmptyRoll(rolls, i);
 					nextAction = Action.EndTurn;
 				}
 				else
@@ -58,6 +58,7 @@ public static class ActionManager {
 			}
 		}
 
+		RemoveAllEmptyRolls(rolls);
 		return nextAction;
 	}
 
@@ -74,5 +75,15 @@ public static class ActionManager {
 	private static bool IsFirstBallOfFrame(int i)
 	{
 		return i % 2 == 0;
+	}
+
+	private static void AddEmptyRoll(List<int> rolls, int i)
+	{
+		rolls.Insert(i, -1);
+	}
+
+	private static void RemoveAllEmptyRolls(List<int> rolls)
+	{
+		rolls.RemoveAll(num => num == -1);
 	}
 }
