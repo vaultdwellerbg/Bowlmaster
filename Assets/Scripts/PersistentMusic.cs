@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PersistentMusic : MonoBehaviour {
 
@@ -14,22 +15,28 @@ public class PersistentMusic : MonoBehaviour {
 		SetVolume(PlayerPrefsManager.GetMasterVolume());
 		PlayClip(0);			
 	}
-	
+
 	void PlayClip(int index)
 	{
 		music.Stop();
 		music.clip = audioClips[index];		
 		music.Play();		
-	}	
-	
-	void OnLevelWasLoaded(int level)
+	}
+
+	private void Start()
 	{
-		if (audioClips[level])
+		SceneManager.sceneLoaded += OnSceneLoaded;
+	}
+
+	void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		int index = scene.buildIndex;
+		if (audioClips[index])
 		{
-			PlayClip(level);
+			PlayClip(index);
 		}
 	}
-	
+
 	public void SetVolume(float volume)
 	{
 		music.volume = volume;
