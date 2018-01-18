@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour {
 
 	public void LoadLevel(string name) 
 	{
-		Application.LoadLevel(name);
+		SceneManager.LoadScene(name);
 	}
 	
 	public void LoadLevel(int index)
 	{
-		Application.LoadLevel(index);
+		SceneManager.LoadScene(index);
 	}
 	
 	public void QuitRequest() 
@@ -20,6 +21,6 @@ public class LevelManager : MonoBehaviour {
 	
 	public void LoadNextLevel()
 	{
-		Application.LoadLevel(Application.loadedLevel + 1);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 }
