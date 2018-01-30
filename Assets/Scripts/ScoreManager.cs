@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public static class ScoreManager {
 
+	public static int finalScore;
+
 	public static List<int> ScoreCumulative(List<int> rolls)
 	{
 		var scoreCardFields = new List<int>();

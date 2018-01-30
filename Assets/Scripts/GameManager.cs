@@ -48,7 +48,14 @@ public class GameManager : MonoBehaviour {
 
 	private void EndGame()
 	{
+		SaveFinalScore();
 		levelManager.LoadNextLevel();
+	}
+
+	private void SaveFinalScore()
+	{
+		List<int> cumulativeScore = ScoreManager.ScoreCumulative(rolls);
+		ScoreManager.finalScore = cumulativeScore[cumulativeScore.Count - 1];
 	}
 
 	private void ResetGameState()
