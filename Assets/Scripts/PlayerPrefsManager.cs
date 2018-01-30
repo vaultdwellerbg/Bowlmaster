@@ -5,6 +5,7 @@ public class PlayerPrefsManager : MonoBehaviour {
 
 	const string MASTER_VOLUME_KEY = "master_volume";
 	const string BALL_MODEL_KEY = "ball_model";
+	const string TOP_SCORE_KEY = "top_score";
 
 	#region master volume
 
@@ -38,6 +39,20 @@ public class PlayerPrefsManager : MonoBehaviour {
 	public static int GetBallModelIndex()
 	{
 		return PlayerPrefs.GetInt(BALL_MODEL_KEY);
+	}
+
+	#endregion
+
+	#region top score
+
+	public static void SetTopScore(int value)
+	{
+		PlayerPrefs.SetInt(TOP_SCORE_KEY, value);
+	}
+
+	public static int GetTopScore()
+	{
+		return PlayerPrefs.GetInt(TOP_SCORE_KEY);
 	}
 
 	#endregion
