@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
 	private BallController ballController;
 	private PinCounter pinCounter;
 	private ScoreDisplay scoreDisplay;
+	private LevelManager levelManager;
 
 	void Start ()
 	{
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour {
 		ballController = GameObject.FindObjectOfType<BallController>();
 		pinCounter = GameObject.FindObjectOfType<PinCounter>();
 		scoreDisplay = GameObject.FindObjectOfType<ScoreDisplay>();
+		levelManager = GameManager.FindObjectOfType<LevelManager>();
 	}
 
 	public void Throw(int pinsHit)
@@ -23,8 +25,13 @@ public class GameManager : MonoBehaviour {
 		try
 		{
 			rolls.Add(pinsHit);
-			pinSetterController.Perform(ActionManager.GetNextAction(rolls));
+			var nextAction = ActionManager.GetNextAction(rolls);
+			pinSetterController.Perform(nextAction);
 			FillScoreCard();
+			if (nextAction == ActionManager.Action.EndGame)
+			{
+				EndGame();
+			}
 		}
 		catch (System.Exception)
 		{
@@ -37,6 +44,11 @@ public class GameManager : MonoBehaviour {
 	{
 		scoreDisplay.FillRolls(rolls);
 		scoreDisplay.FillFrames(ScoreManager.ScoreCumulative(rolls));
+	}
+
+	private void EndGame()
+	{
+		levelManager.LoadNextLevel();
 	}
 
 	private void ResetGameState()
