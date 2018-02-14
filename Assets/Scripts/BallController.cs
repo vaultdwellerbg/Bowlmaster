@@ -50,6 +50,14 @@ public class BallController : MonoBehaviour {
 		}
 	}
 
+	private void OnCollisionExit(Collision collision)
+	{
+		if (collision.collider.name == "Floor")
+		{
+			audioSource.Stop();
+		}
+	}
+
 	public void Reset()
 	{
 		rigidBody.velocity = rigidBody.angularVelocity = Vector3.zero;
