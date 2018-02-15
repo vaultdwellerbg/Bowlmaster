@@ -18,15 +18,25 @@ public class BallDragLaunch : MonoBehaviour {
 
 	public void DragStart()
 	{
-		if (ballController.IsLaunched) return;
+		if (IsBallInputBlocked()) return;
 
 		dragStartTime = Time.time;
 		dragStartPos = Input.mousePosition;
 	}
 
+	private bool IsBallInputBlocked()
+	{
+		return ballController.IsLaunched || IsInstructionsPanelActive();
+	}
+
+	private bool IsInstructionsPanelActive()
+	{
+		return GameObject.Find("InstructionsPanel") != null;
+	}
+
 	public void DragEnd()
 	{
-		if (ballController.IsLaunched) return;
+		if (IsBallInputBlocked()) return;
 
 		Vector3 dragVector = Input.mousePosition - dragStartPos;
 		float dragTime = Time.time - dragStartTime;
@@ -43,7 +53,7 @@ public class BallDragLaunch : MonoBehaviour {
 
 	public void MoveLaunchPoint(float value)
 	{
-		if (ballController.IsLaunched) return;
+		if (IsBallInputBlocked()) return;
 
 		float newXPos = Mathf.Clamp(ballController.transform.position.x + value, -halfLaneWidth, halfLaneWidth);
 		Vector3 currentPos = ballController.transform.position;
